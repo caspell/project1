@@ -5,65 +5,69 @@ import matplotlib.pyplot as plt
 
 import sys , os
 
+class FontUtil :
 
-with open("fonts.txt", "r") as f :
-    fonts = [ line.replace('\n', '') for line in f.readlines() ]
+    def __init__(self, text="0123456789"):
+        self._text = text
 
+        #print ( fonts)
+    def load(self, filePath):
+        with open("fonts.txt", "r") as f :
+            self._fonts = [ line.replace('\n', '') for line in f.readlines() ]
 
-#print ( fonts)
-nums = "0123456789"
+    def getFullImages (self) :
+        list = []
+        for font in self._fonts:
+            list.append(self.getToImage(font, self._text))
 
+    def getToImage (self, fontPath, strs) :
+        returnValue = []
+        for _char in strs :
 
-def getToImage (fontPath, strs) :
-    returnValue = []
-    for _char in strs :
+            im = Image.new("RGB", (28, 28))
 
-        im = Image.new("RGB", (28, 28))
+            draw = ImageDraw.Draw(im)
 
-        draw = ImageDraw.Draw(im)
+            font = ImageFont.truetype(fontPath, 30)
 
-        font = ImageFont.truetype(fontPath, 30)
+            draw.text((0, 0), _char, font=font)
 
-        draw.text((0, 0), _char, font=font)
+            im = im.convert('L')
 
-        im = np.array(im.getdata()).reshape(im.size[0], im.size[1], 3)
+            im = np.array(im.getdata()).reshape(im.size[0], im.size[1])
 
-        returnValue.append(im)
+            returnValue.append(im)
 
-    return returnValue
+        return returnValue
 
-'''
-for font in fonts :
-    print(font)
-    try :
-        fonta = ImageFont.truetype(font, 30)
-        #print(font.size)
-    except :
-        print ('error ' , font)
-'''
+    '''
+    for font in fonts :
+        print(font)
+        try :
+            fonta = ImageFont.truetype(font, 30)
+            #print(font.size)
+        except :
+            print ('error ' , font)
+    '''
 
+def main() :
 
-# remove unneccessory whitespaces if needed
-# im2=palate.crop(palate.getbbox())
+    fontUtil = FontUtil()
 
-# im=palate
+    test = '/home/mhkim/tools/android-studio/plugins/android/lib/layoutlib/data/fonts/DroidSans.ttf'
 
+    # test = img.imread(test)
 
+    # plt.imshow(test)
+    # plt.show()
 
+    result = fontUtil.getToImage(test, '123')
+    #
+    print(result)
+    #
+    for c in result:
+        plt.imshow(c)
+        plt.show()
 
-
-# im = im2.copy()
-
-
-test = '/home/mhkim/tools/android-studio/plugins/android/lib/layoutlib/data/fonts/DroidSans.ttf'
-
-
-
-
-result = getToImage(test, '123')
-
-print(result)
-
-for c in result :
-    plt.imshow(c)
-    plt.show()
+if __name__ == '__main__' :
+    main()
