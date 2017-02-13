@@ -51,7 +51,6 @@ for font in fonts :
 
 
 
-# im = im.save("img.png")
 
 # im = im2.copy()
 
