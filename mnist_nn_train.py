@@ -78,7 +78,7 @@ learning_rate = tf.train.exponential_decay(
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
 train = optimizer.minimize(cost, name='train')
 
-with tf.Session() as sess :
+with tf.Session(config=tf.ConfigProto(log_device_placement=True)) as sess :
     tf.global_variables_initializer().run()
 
     saver = tf.train.Saver()
